@@ -1,0 +1,22 @@
+.text-new-products {
+    text-shadow: 0 0 10px #000000;
+
+}
+
+.view-more-shadow {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.hot-sale-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* Thêm kiểu CSS để ẩn thanh cuộn trong Slider ở phần "Hot Sale" */
+.banner-products-new .slick-slider {
+    overflow: hidden;
+  }
+  
+  .banner-products-new .slick-list {
+    overflow: initial;
+  }
+  

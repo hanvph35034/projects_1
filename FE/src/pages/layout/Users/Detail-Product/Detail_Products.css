@@ -1,0 +1,41 @@
+.active-bg-size {
+    background-color: black;
+    color: white;
+}
+
+.prd-sale {
+    transition: all 0.6s;
+    transform: translateY(0);
+}
+
+.slider:hover .prd-sale {
+    transform: translateY(-150%);
+}
+
+.slider:hover .icon-arrow-left {
+    transform: translateX(0) translateY(-50%);
+}
+
+.slider:hover .icon-arrow-right {
+    transform: translateX(0) translateY(-50%);
+
+}
+
+.shadow-rating-user {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+
+}
+
+progress {
+    border-radius: 9999px;
+}
+
+progress::-webkit-progress-value {
+    background-color: #17c6aa;
+    border-radius: 9999px;
+}
+
+progress::-webkit-progress-bar {
+    background-color: rgb(226, 219, 219);
+
+}

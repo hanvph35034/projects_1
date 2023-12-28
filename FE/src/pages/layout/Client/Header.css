@@ -1,0 +1,51 @@
+.loading-search-header {
+
+    animation: loading 0.4s linear infinite;
+}
+
+
+
+@keyframes loading {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.SearchResult::-webkit-scrollbar {
+    display: none;
+}
+
+.navbar-menu-header-mobile {
+    transition: all 0.5s ease;
+    transform: translateY(-100%);
+}
+
+.slide-in {
+    transform: translate3d(0, 0, 0);
+}
+
+.slide-out {
+    transform: translate3d(100%, -100%, 0);
+}
+
+.search-header {
+    transition: width 0.5s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+    .account-user-moblie-header {
+        display: block;
+    }
+
+}
+
+@media screen and (min-width: 768px) {
+    .account-user-moblie-header {
+        display: none;
+    }
+
+}

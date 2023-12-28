@@ -1,0 +1,116 @@
+/* .content{
+    transition-duration: all 0.5s;
+} */
+.prd-sale {
+  transition: all 0.3s;
+  transform: translateY(0);
+}
+
+.content:hover .prd-sale {
+  transform: translateY(-150%);
+}
+
+.list-options {
+  transition: all 0.3s;
+  transform: translateX(-150%);
+}
+
+.content:hover .list-options {
+
+  /*Thêm hiệu ứng trượt sang trái cho .list-options*/
+
+  transform: translateX(0);
+}
+
+.btn-add {
+
+  transition: all 0.3s;
+  transform: translateY(150%);
+}
+
+.content:hover .btn-add {
+
+  transform: translateY(-50%);
+}
+
+.price {
+  transition: all 0.2s;
+  opacity: 1;
+
+}
+
+.content:hover .price {
+  opacity: 0;
+}
+
+.content:hover .image-big>img {
+  transform: scale(1.2);
+  /*Thêm hiệu ứng chuyển đổi cho .image-big>img*/
+  transition: transform 0.5s;
+}
+
+.prd-circle-labels {
+
+  transition: all 0.3s;
+  transform: translateX(150%);
+}
+
+.content:hover .prd-circle-labels {
+  transform: translateX(0);
+
+}
+
+.icon-heart-stroke {
+  transform: rotate(0);
+  transition: transform 0.2s;
+}
+
+.heart:hover .icon-heart-stroke {
+  transform: rotate3d(0, 1, 0, 180deg);
+
+}
+
+.icon-eye {
+  transform: rotate(0);
+  transition: transform 0.2s;
+
+}
+
+.eye:hover .icon-eye {
+  transform: rotate3d(0, 1, 0, 180deg);
+}
+
+.icon-palette {
+  transform: rotate(0);
+  transition: transform 0.5s;
+}
+
+.color-palette:hover .icon-palette {
+  transform: rotate3d(0, 0, 1, 360deg);
+}
+
+.list-color {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.color-palette:hover .list-color {
+  max-height: 120px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* Giá trị tối đa của chiều cao phần tử .list-color */
+}
+@keyframes scrollText {
+  from {
+    transform: translateX(200%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-scrolling-text {
+  animation: scrollText 20s linear infinite;
+}
+

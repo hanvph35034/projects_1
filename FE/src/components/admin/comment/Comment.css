@@ -1,0 +1,15 @@
+.shadow-content-comment {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+
+}
+
+.inp-comments {
+    opacity: 1;
+    transition: all 0.3s;
+
+}
+
+.comment-text-user,
+.inp-comment {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
