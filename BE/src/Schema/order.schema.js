@@ -3,15 +3,16 @@ import Joi from "joi";
 export const validation = (req, res, next) => {
     const schema = Joi.object({
         user_id: Joi.string().required(),
-        status: Joi.string(),
+        status: Joi.string().default("pending"), // Đặt giá trị mặc định là "pending"
         products: Joi.array().items({
             product_id: Joi.string().required(),
+            color: Joi.string().required(),
+            size: Joi.string().required(),
             quantity: Joi.number().required(),
         }),
         total_price: Joi.number().required(),
         address: Joi.string().required(),
-        payment_id: Joi.string().required(),
-        sale_id: Joi.string(),
+        sale_id: Joi.string().allow(null), // Cho phép giá trị là null
     });
 
     const result = schema.validate(req.body);

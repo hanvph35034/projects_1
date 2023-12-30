@@ -6,10 +6,12 @@ import * as per from "../middlewares/checkPermission.js";
 
 const router = express.Router();
 
-router.route("/orders/:id").put(Order.updateStatus);
-router.route("/orders").get(Order.getAll).post(OrderValidator.validation, Order.createOrder);
+// ------------------- order --------------------------
 router.get("/GetDetailOrder", Order.GetDetailOrder);
 router.get("/GetAllOrder", Order.GetAllOrder);
+router.get("/orders", Order.getAll);
+router.post("/orders", OrderValidator.validation, Order.createOrder);
+router.put("/orders/:id", Order.updateStatus);
 
 //
 router.get("/deleteOrder", Order.deleteOrder);

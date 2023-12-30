@@ -1,10 +1,6 @@
 import mongoose from "mongoose";
 const Orders = new mongoose.Schema(
     {
-        payment_id: {
-            type: mongoose.Types.ObjectId,
-            required: true,
-        },
         address: {
             type: String,
         },
@@ -15,12 +11,23 @@ const Orders = new mongoose.Schema(
             type: mongoose.Types.ObjectId,
             required: true,
         },
-        products: [{ product_id: { type: mongoose.Types.ObjectId, required: true }, quantity: { type: Number, default: 1 }, _id: false }],
-        status: { type: String, enum: ["pending", "waiting", "delivering", "done", "cancel"], default: "pending" },
+        products: [{
+            product_id: {type: mongoose.Types.ObjectId, required: true},
+            color: {
+                type: String,
+            },
+            size: {
+                type: String,
+            },
+            quantity: {type: Number, default: 1},
+            _id: false
+        }],
+        status: {type: String, enum: ["pending", "waiting", "delivering", "done", "cancel"], default: "pending"},
         sale_id: {
             type: mongoose.Types.ObjectId,
         },
-        reason: { type: String },
+        reason: {type: String},
+        total_price: Number,
     },
     {
         timestamps: true,
