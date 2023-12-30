@@ -12,6 +12,7 @@ router.get("/GetAllOrder", Order.GetAllOrder);
 router.get("/orders", Order.getAll);
 router.post("/orders", OrderValidator.validation, Order.createOrder);
 router.put("/orders/:id", Order.updateStatus);
+router.get("/orders/:id", Order.getOrderById);
 
 //
 router.get("/deleteOrder", Order.deleteOrder);

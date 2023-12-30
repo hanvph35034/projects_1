@@ -248,3 +248,104 @@ export const OrderUser = async (req, res, next) => {
             return functions.setError(res, error.message);
         }
     };
+// get order by ID
+export const getOrderById = async (req, res) => {
+    try {
+        const orderId = req.params.id; // Assuming the order ID is passed as a parameter in the request URL
+
+        // Add any additional validation for orderId if needed
+        const order = await Orders.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(orderId),
+                },
+            },
+            {
+                $unwind: "$products",
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "products.product_id",
+                    foreignField: "_id",
+                    as: "product",
+                },
+            },
+            {
+                $lookup: {
+                    from: "payment",
+                    localField: "payment_id",
+                    foreignField: "_id",
+                    as: "payment",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$payment",
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                $project: {
+                    user_id: 1,
+                    status: 1,
+                    total_price: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    payment: 1,
+                    product: {$arrayElemAt: ["$product", 0]},
+                    quantity: "$products.quantity",
+                },
+            },
+            {
+                $group: {
+                    _id: {
+                        _id: "$_id",
+                        user_id: "$user_id",
+                        address: "$address",
+                        status: "$status",
+                        payment: "$payment",
+                        total_price: "$total_price",
+                        createdAt: "$createdAt",
+                        updatedAt: "$updatedAt",
+                    },
+                    products: {
+                        $push: {product: "$product", quantity: "$quantity"},
+                    },
+                },
+            },
+            {
+                $project: {
+                    _id: "$_id",
+                    user_id: "$_id.user_id",
+                    address: "$_id.address",
+                    status: "$_id.status",
+                    total_price: "$_id.total_price",
+                    payment: "$_id.payment",
+                    createdAt: "$_id.createdAt",
+                    updatedAt: "$_id.updatedAt",
+                    products: 1,
+                },
+            },
+            {
+                $sort: {
+                    createdAt: -1,
+                },
+            },
+        ]);
+
+        if (order.length === 0) {
+            return res.status(404).json({
+                message: "Order not found",
+            });
+        }
+
+        return res.status(200).json({
+            message: "Get order by ID successfully",
+            data: order[0], // Assuming there should be only one order with the given ID
+        });
+    } catch (error) {
+        console.error('Error in getOrderById:', error);
+        return functions.setError(res, error.message);
+    }
+};
