@@ -6,14 +6,14 @@ import * as functions from "../service/functions.js";
 // đặt hàng
 export const OrderUser = async (req, res, next) => {
     try {
-        let {address, phone, id_user, id_product} = req.body;
+        let { address, phone, id_user, id_product } = req.body;
         if (!address) return functions.setError(res, "Vui lòng nhập vào địa chỉ", 400);
         if (!phone) return functions.setError(res, "Vui lòng nhập vào số điện thoại", 400);
         if (!id_product) return functions.setError(res, "Vui lòng nhập vào id sản phẩm", 400);
-        if (!address) return functions.setError(res, "Vui lòng nhập vào iid người mua", 400);
+        if (!id_user) return functions.setError(res, "Vui lòng nhập vào id người mua", 400);
 
         if (id_user && id_product && phone && address) {
-            let checkId = await Orders.findOne({}, {id_order: 1}).sort({id_order: -1}).lean();
+            let checkId = await Orders.findOne({}, { id_order: 1 }).sort({ id_order: -1 }).lean();
             let id_order = checkId ? checkId.id_order + 1 : 1;
 
             console.log('Creating Order with ID:', id_order);
@@ -23,23 +23,21 @@ export const OrderUser = async (req, res, next) => {
                 address,
                 phone,
                 user_id: id_user,
-                products,
+                // You need to define 'products', 'total_price', 'sale_id' before using them.
+                products: [], // Replace with the actual array of products
                 status: "pending",
-                total_price,
-                sale_id,
+                total_price: 0, // Replace with the actual total price
+                sale_id: null, // Replace with the actual sale ID
             });
 
             return functions.success(res, `Đặt hàng thành công với id_order: ${id_order}`);
         }
-    catch
-        (error)
-        {
-            console.error('Error in OrderUser:', error);
-            return functions.setError(res, error.message);
-        }
+    } catch (error) {
+        console.error('Error in OrderUser:', error);
         return functions.setError(res, error.message);
     }
-    ;
+};
+
 
 // get order
     export const getAll = async (req, res) => {
