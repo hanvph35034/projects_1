@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Button, Table, Spin, notification, Select, Input, DatePicker } from 'antd';
+import { FolderViewOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './a.css';
+const { RangePicker } = DatePicker;
 
 function App() {
   const [data, setData] = useState([]);
@@ -25,65 +29,161 @@ function App() {
     }
   }
 
-  function updateOrder(_id) {
-    const orderToEdit = data.find(order => order._id === _id);
-    setEditedData({
-      phone: orderToEdit.phone,
-      address: orderToEdit.address,
-      status: orderToEdit.status,
-    });
-  }
+  const dataSource = [
+    {
+      key: '1',
+      code: 'DH0001',
+      name: 'Mike',
+      phone: '0349791128',
+      age: 32,
+      moneny: '100000',
+      product: 4,
+      address: '10 Downing Street',
+    },
+    {
+      key: '2',
+      code: 'DH0002',
+      name: 'John',
+      phone: '0349791128',
+      age: 42,
+      moneny: '100000',
+      product: 5,
+      address: '10 Downing Street',
+    },
+    {
+      key: '3',
+      code: 'DH0002',
+      name: 'John',
+      phone: '0349791128',
+      age: 42,
+      moneny: '100000',
+      product: 5,
+      address: '10 Downing Street',
+    },
+    {
+      key: '4',
+      code: 'DH0002',
+      name: 'John',
+      phone: '0349791128',
+      age: 42,
+      moneny: '100000',
+      product: 5,
+      address: '10 Downing Street',
+    },
+    {
+      key: '5',
+      code: 'DH0002',
+      name: 'John',
+      phone: '0349791128',
+      age: 42,
+      moneny: '100000',
+      product: 5,
+      address: '10 Downing Street',
+    },
+    {
+      key: '6',
+      code: 'DH0002',
+      name: 'John',
+      phone: '0349791128',
+      age: 42,
+      moneny: '100000',
+      product: 5,
+      address: '10 Downing Street',
+    },
+  ];
 
-  function submitForm(_id) {
-    updateOrder(_id)
-    // Xây dựng URL với các tham số
-    const url = `http://localhost:8080/api/updateOrder?_id=${_id}&phone=${editedData.phone}&address=${editedData.address}&status=${editedData.status}`;
-    
-    // Thực hiện request GET
-    axios.get(url)
-      .then(response => {
-        if (response.status === 200) {
-          window.location.reload();
-        } else {
-          console.error('Failed to update order');
-        }
-      })
-      .catch(error => console.log(error));
-  }
+  const columns = [
+    {
+      title: 'Mã đơn',
+      dataIndex: 'code',
+      key: 'code',
+    },
+    {
+      title: 'Người mua',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'SĐT',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: 'Địa chỉ',
+      dataIndex: 'address',
+      key: 'address',
+    },
+    {
+      title: 'Số tiền',
+      dataIndex: 'moneny',
+      key: 'moneny',
+      render: (data: any) => {
+        return <p>{
+          new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          }).format(data)}</p>;
+      },
+    },
+    {
+      title: 'Số sản phẩm',
+      dataIndex: 'product',
+      key: 'product',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: ({ key: id }: { key: number | string }) => {
+        return (
+          <>
+            <Button>
+              <Link to={`/admin/product/update/${id}`}><FolderViewOutlined /></Link>
+            </Button>
+          </>
+        );
+      },
+    },
+  ];
 
   return (
-    <div>
-      <h1>Danh sách Order</h1>
-      <span>
-        <div className="grid-container">
-          <div className="posXX">ID</div>
-          <div className="posXX">ID USER</div>
-          <div className="posXX">PHONE</div>
-          <div className="posXX">ĐỊA CHỈ</div>
-          <div className="posXX">STATUS</div>
-          <div className="posXX">Date_created</div>
-          <div className="posXX">Action</div>
+    <>
+      <header>
+        <div className="flex justify-between">
+          <h2 className="text-2xl">Quản lý hóa đơn</h2>
+          <p className="text-xl red mr-5">Month 10: 
+          <span className='text-red-600'>{new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          }).format(300000)}</span></p>
         </div>
-        {data.map(user => (
-          <form className="grid-container" key={user._id} onSubmit={(e) => {
-            e.preventDefault();submitForm(user._id);
-          }}>
-            <div className="posXX">{user.id_product}</div>
-            <div className="posXX">{user.id_user}</div>
-            <div contentEditable className="posXX" onInput={(e) => setEditedData({ ...editedData, phone: e.target.textContent })} >{user.phone}</div>
-            <div contentEditable className="posXX" onInput={(e) => setEditedData({ ...editedData, address: e.target.textContent })}>{user.address}</div>
-            <div contentEditable className="posXX" onInput={(e) => setEditedData({ ...editedData, status: e.target.textContent })}>{user.status}</div>
-            <div contentEditable className="posXX">{user.date_created}</div>
-
-            <div className="flex space-x-4">
-  <button className="bg-blue-500 text-white px-4 py-2 rounded" type="submit">Sửa</button>
-  <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={() => deleteOrder(user._id)}>Xóa</button>
-</div>
-
-          </form>
-        ))}
-      </span>
-    </div>
+        <div className="mt-2 flex">
+          <Input
+            placeholder="Tìm hóa đơn theo mã đơn"
+            style={{ width: 200 }}
+          />
+          <Input
+            className='ml-3'
+            placeholder="Tìm hóa đơn theo tên người mua"
+            style={{ width: 200 }}
+          />
+          <RangePicker className='ml-3' />
+          <Select
+            className='ml-2'
+            defaultValue="wait"
+            style={{ width: 200 }}
+            options={[
+              { value: 'wait', label: 'Chờ xét duyệt' },
+              { value: 'prepare', label: 'Chuyển bị hàng' },
+              { value: 'transport', label: 'Vận chuyển' },
+              { value: 'success', label: 'Hoàn thành' },
+            ]}
+          />
+        </div>
+      </header>
+      <>
+        <Table className='mt-4' dataSource={dataSource} columns={columns} />;
+      </>
+    </>
   );
 }
 

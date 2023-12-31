@@ -12,6 +12,7 @@ import {
   ControlOutlined,
   BookOutlined,
   MailOutlined,
+  BarChartOutlined,
   HomeOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
@@ -76,12 +77,16 @@ const items: MenuItem[] = [
     getItem(<Link to="/admin/role">List</Link>, '34',),
     getItem(<Link to="/admin/role/add">Add</Link>, '35'),
   ]),
-  getItem('Color', 'sub5', <UnorderedListOutlined />, [
-    getItem(<Link to="/admin/color">List</Link>, '36',),
-    getItem(<Link to="/admin/color/add">Add</Link>, '37'),
+  getItem('Order', 'sub5', <BarChartOutlined /> , [
+    getItem(<Link to="/admin/order">List</Link>, '36',),
+    getItem(<Link to="/admin/role/add">Add</Link>, '37'),
   ]),
-  getItem(<Link to="/admin/sale">Sale</Link>, '38', <TeamOutlined />,),
-  getItem(<Link to="/">Trang chủ</Link>, '50', <HomeOutlined />,),
+  getItem('Color', 'sub6', <UnorderedListOutlined />, [
+    getItem(<Link to="/admin/order">List</Link>, '38',),
+    getItem(<Link to="/admin/color/add">Add</Link>, '39'),
+  ]),
+  getItem(<Link to="/admin/sale">Sale</Link>, '40', <TeamOutlined />,),
+  getItem(<Link to="/">Trang chủ</Link>, '41', <HomeOutlined />,),
 ];
 
 const AdminLayout: React.FC = () => {
@@ -103,7 +108,7 @@ const AdminLayout: React.FC = () => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="demo-logo-vertical" />
+        <h2 className='p-5 text-2xl text-white'>Sneaker Store</h2>
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
       </Sider>
       <Layout>
