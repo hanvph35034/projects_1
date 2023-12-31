@@ -50,6 +50,8 @@ import Blogtintuc from "./pages/layout/Users/Blog/Blogtintuc";
 import Shop_Products from "./pages/layout/Users/Shop-Products/Shop_Products";
 import Detail_Product from "./pages/layout/Users/Detail-Product/Detail_Product";
 import Cart from "./pages/layout/Users/Cart/cart";
+import Orderr from "./pages/layout/Users/order/Order";
+import Payment from "./pages/layout/Users/Payment/Payment";
 import ListCategory from "./pages/layout/Users/List-Category/ListCategory";
 import Signin from "./pages/layout/Users/Signin/signin";
 import Signup from "./pages/layout/Users/Signup/signup";
@@ -123,9 +125,13 @@ export const routers = createBrowserRouter([
         element: <Cart />,
       },
       {
-        path: "/order",
-        element: <Order />,
+        path: "/payment",
+        element: <Payment />,
     },
+    {
+      path: "/order",
+      element: <Orderr />,
+  },
     {
         path: "/order-history",
         element: <OrderHistory />,
@@ -150,7 +156,7 @@ export const routers = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: <PrivateRoute element={<AdminLayout />} />,
     children: [
       {
         path: "product",
