@@ -25,7 +25,7 @@ const config = {
     vnp_HashSecret: "GLQYEDNCQMOQNNTMBWMPAAEDPWTWLFOH",
     vnp_Url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
     vnp_Api: "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction",
-    vnp_ReturnUrl: "http://localhost:8080/api/vnpay/vnpay_ipn",
+    vnp_ReturnUrl: "http://localhost:5173/payment",
 };
 
 class PayMentController {

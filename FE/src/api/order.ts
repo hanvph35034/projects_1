@@ -16,8 +16,11 @@ const orderApi = createApi({
         updateOrder: builder.mutation<any, any>({
             query: ({ _id, status }) => ({ url: "/api/orders/" + _id, method: "PUT", body: { status } }),
         }),
+        getOrderById: builder.query<any, any>({
+            query: (id) => `/api/orders/${id}`
+        }),
     }),
 });
 
-export const { useGetAllOrdersQuery, useNewOrderMutation, useUpdateOrderMutation } = orderApi;
+export const { useGetAllOrdersQuery, useNewOrderMutation, useUpdateOrderMutation, useGetOrderByIdQuery } = orderApi;
 export default orderApi;
