@@ -40,19 +40,18 @@ export const OrderUser = async (req, res, next) => {
 
 
 // get order
-    export const getAll = async (req, res) => {
-        const {page = 1, limit = 10, sort = "createdAt", order = -1, ...query} = req.query;
+export const getAll = async (req, res) => {
+    try {
+        const { page = 1, limit = 10, sort = "createdAt", order = -1, ...query } = req.query;
         const skip = (page - 1) * limit;
         const sortOptions = {
             [sort]: order === 1 ? 1 : -1,
         };
-        const condition = req.query.user_id ? {user_id: new mongoose.Types.ObjectId(req.query.user_id)} : query;
+        const condition = req.query.user_id ? { user_id: new mongoose.Types.ObjectId(req.query.user_id) } : query;
 
         const orders = await Orders.aggregate([
-            {$match: condition},
-            {
-                $unwind: "$products",
-            },
+            { $match: condition },
+            { $unwind: "$products" },
             {
                 $lookup: {
                     from: "products",
@@ -70,6 +69,14 @@ export const OrderUser = async (req, res, next) => {
                 },
             },
             {
+                $lookup: {
+                    from: "users", // Assuming your User model is named "User" and is stored in the "users" collection
+                    localField: "user_id",
+                    foreignField: "_id",
+                    as: "user",
+                },
+            },
+            {
                 $unwind: {
                     path: "$payment",
                     preserveNullAndEmptyArrays: true,
@@ -83,8 +90,9 @@ export const OrderUser = async (req, res, next) => {
                     createdAt: 1,
                     updatedAt: 1,
                     payment: 1,
-                    product: {$arrayElemAt: ["$product", 0]},
+                    product: { $arrayElemAt: ["$product", 0] },
                     quantity: "$products.quantity",
+                    user: { $arrayElemAt: ["$user", 0] },
                 },
             },
             {
@@ -100,8 +108,9 @@ export const OrderUser = async (req, res, next) => {
                         updatedAt: "$updatedAt",
                     },
                     products: {
-                        $push: {product: "$product", quantity: "$quantity"},
+                        $push: { product: "$product", quantity: "$quantity" },
                     },
+                    user: { $first: "$user" },
                 },
             },
             {
@@ -115,6 +124,7 @@ export const OrderUser = async (req, res, next) => {
                     createdAt: "$_id.createdAt",
                     updatedAt: "$_id.updatedAt",
                     products: 1,
+                    user: 1,
                 },
             },
             {
@@ -122,13 +132,23 @@ export const OrderUser = async (req, res, next) => {
                     createdAt: -1,
                 },
             },
+            {
+                $skip: skip,
+            },
+            {
+                $limit: limit,
+            },
         ]);
 
         return res.status(200).json({
             message: "Get all order successfully",
             data: orders,
         });
-    };
+    } catch (error) {
+        console.error('Error in getAll:', error);
+        return functions.setError(res, error.message);
+    }
+};
 
     export const updateStatus = async (req, res, next) => {
         try {
