@@ -280,6 +280,14 @@ export const getOrderById = async (req, res) => {
                 },
             },
             {
+                $lookup: {
+                    from: "users", // Assuming your User model is named "User" and is stored in the "users" collection
+                    localField: "user_id",
+                    foreignField: "_id",
+                    as: "user",
+                },
+            },
+            {
                 $unwind: {
                     path: "$payment",
                     preserveNullAndEmptyArrays: true,
@@ -295,6 +303,7 @@ export const getOrderById = async (req, res) => {
                     payment: 1,
                     product: {$arrayElemAt: ["$product", 0]},
                     quantity: "$products.quantity",
+                    user: {$arrayElemAt: ["$user", 0]},
                 },
             },
             {
@@ -312,6 +321,7 @@ export const getOrderById = async (req, res) => {
                     products: {
                         $push: {product: "$product", quantity: "$quantity"},
                     },
+                    user: {$first: "$user"},
                 },
             },
             {
@@ -325,6 +335,7 @@ export const getOrderById = async (req, res) => {
                     createdAt: "$_id.createdAt",
                     updatedAt: "$_id.updatedAt",
                     products: 1,
+                    user: 1,
                 },
             },
             {
@@ -349,3 +360,4 @@ export const getOrderById = async (req, res) => {
         return functions.setError(res, error.message);
     }
 };
+
