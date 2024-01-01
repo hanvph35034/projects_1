@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
+const userString = localStorage.getItem("user");
+const user = userString ? JSON.parse(userString) : {};
 const Cart = () => {
     const carts = useAppSelector((state) => state.cart.cart);
     const [checkedItems, setCheckedItems] = useState<any>({});
@@ -57,23 +58,38 @@ const Cart = () => {
     };
 
     const handlePayment = () => {
-        Swal.fire({
-            position: "center",
-            title: "Warning",
-            text: "Bạn muốn xác nhận thanh toán chứ!!",
-            icon: "warning",
-            confirmButtonText: "Đồng ý",
-            showDenyButton: true,
-            returnInputValueOnDeny: false,
-            denyButtonText: "Cancel",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const infoPayment = handleToTalCart();
+        console.log('user',user)
+        if(user == {} || !user._id){
+            Swal.fire({
+                icon: "error",
+                title: "Chưa đăng nhập",
+                text: "Vui lòng đăng nhập trước khi thanh toán!",
+                footer: '<a href="#">Why do I have this issue?</a>'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate("/signin");
+                }
+            });
+        }else{
+            Swal.fire({
+                position: "center",
+                title: "Warning",
+                text: "Bạn muốn xác nhận thanh toán chứ!!",
+                icon: "warning",
+                confirmButtonText: "Đồng ý",
+                showDenyButton: true,
+                returnInputValueOnDeny: false,
+                denyButtonText: "Cancel",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const infoPayment = handleToTalCart();
+    
+                    sessionStorage.setItem("infoPayment", JSON.stringify(infoPayment));
+                    navigate("/order");
+                }
+            });
+        }
 
-                sessionStorage.setItem("infoPayment", JSON.stringify(infoPayment));
-                navigate("/order");
-            }
-        });
     };
 
     useEffect(() => {

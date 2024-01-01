@@ -1,13 +1,23 @@
 import { useGetAllOrdersQuery, useUpdateOrderMutation } from "@/api/order";
 import clsx from "clsx";
-import React from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
+const userString = localStorage.getItem("user");
+const user = userString ? JSON.parse(userString) : {};
+
 
 const OrderHistory = () => {
+    const navigate = useNavigate();
+    console.log('user',user._id);
+    if(!user || !user._id){
+        navigate("/");
+    }
     // Laays thoong tin khi ddanwg nhap
-    const userId = "65465224dc28e240806b6c74";
+    const userId = user._id ?? 'NULL';
     const { data, isFetching, refetch } = useGetAllOrdersQuery({ user_id: userId });
+    console.log('useGetAllOrdersQuery',data?.data);
 
     const [updateOrder] = useUpdateOrderMutation();
     const handleCancel = (id: string) => {
@@ -59,10 +69,10 @@ const OrderHistory = () => {
                                                         : "Chờ xác nhận shop"}
                                     </span>
                                 </div>
-                                <div className="flex gap-2">
+                                {/* <div className="flex gap-2">
                                     <span className="font-medium">Thanh toán:</span>
                                     <span className="text-red-500">Chưa thanh toán</span>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="flex items-center w-full">
                                 <div className="w-full flex flex-1 flex-col gap-2">
@@ -73,10 +83,15 @@ const OrderHistory = () => {
                                             </span>
                                             <div className="flex-1 ">
                                                 <h1 className="text-base font-bold">{product?.product?.name}</h1>
-
+                                                <div className="mt-1 flex gap-3">
+                                                <div className ="w-7 h-7 rounded-full flex items-center justify-center"
+                                                style={{ backgroundColor: product?.color }}
+                                                ></div>
+                                                    <p>Size: {product?.size}</p>
+                                                </div>
                                                 <div className="mt-1 flex gap-3">
                                                     <span className="text-red-500 font-medium">{product?.product?.price?.toLocaleString()} VNĐ</span>
-                                                    <p>x{product.product?.quantity}</p>
+                                                    <p>x{product.quantity}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -95,7 +110,7 @@ const OrderHistory = () => {
                             <div className="flex flex-col gap-2 w-full items-end pt-3">
                                 <div>
                                     <span>Tổng tiền: </span>
-                                    <span>{order?.payment?.totalPrice?.toLocaleString() || 0} VNĐ</span>
+                                    <span>{order.total_price?.toLocaleString() || 0} VNĐ</span>
                                 </div>
                             </div>
                         </div>
