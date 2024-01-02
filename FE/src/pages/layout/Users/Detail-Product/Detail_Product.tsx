@@ -123,8 +123,7 @@ const Detail_Product = () => {
                     <div className="slider-text-content min-w-full  flex flex-col gap-5 mt-8 md:mt-10 md:flex-row justify-between  ">
                         {/* slider */}
                         <div className="slider w-full md:w-2/5 relative overflow-hidden ">
-                            <ImagePriview width={80} listImage={product?.product.image} />
-
+                            <img src={product?.product.image[0]} alt="" />
                             {/* sale */}
                             <div className="prd-sale absolute top-2 left-1 min-w-[75px]">
                                 {product?.product.hot_sale > 10 && (

@@ -1,96 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Spin, notification, Select, Input, DatePicker } from 'antd';
 import { FolderViewOutlined } from '@ant-design/icons';
+import { IUser } from "@/interfaces/user";
 import { Link } from 'react-router-dom';
+import { ISOrder } from '../../../interfaces/orders'; 
+import { useGetAllOrdersInAdminQuery } from '../../../api/order';
+import { useGetUserQuery } from "@/api/user";
 import axios from 'axios';
 import './a.css';
 const { RangePicker } = DatePicker;
 
 function App() {
-  const [data, setData] = useState([]);
-  const [editedData, setEditedData] = useState({
-    phone: '',
-    address: '',
-    status: '',
-  });
+  const { data:orders} = useGetAllOrdersInAdminQuery();
+  const { data: users } = useGetUserQuery();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [status , setStatus] = useState('pending');
 
-  useEffect(() => {
-    axios.get('http://localhost:8080/api/GetAllOrder')
-      .then(response => setData(response.data.data.data))
-      .catch(error => console.log(error));
-  }, []);
-
-  async function deleteOrder(_id) {
-    if (_id) {
-      const response = await axios.get(`http://localhost:8080/api/deleteOrder?_id=${_id}`);
-      if (response.status === 200) {
-        window.location.reload();
-      }
-    }
-  }
-
-  const dataSource = [
-    {
-      key: '1',
-      code: 'DH0001',
-      name: 'Mike',
-      phone: '0349791128',
-      age: 32,
-      moneny: '100000',
-      product: 4,
-      address: '10 Downing Street',
-    },
-    {
-      key: '2',
-      code: 'DH0002',
-      name: 'John',
-      phone: '0349791128',
-      age: 42,
-      moneny: '100000',
-      product: 5,
-      address: '10 Downing Street',
-    },
-    {
-      key: '3',
-      code: 'DH0002',
-      name: 'John',
-      phone: '0349791128',
-      age: 42,
-      moneny: '100000',
-      product: 5,
-      address: '10 Downing Street',
-    },
-    {
-      key: '4',
-      code: 'DH0002',
-      name: 'John',
-      phone: '0349791128',
-      age: 42,
-      moneny: '100000',
-      product: 5,
-      address: '10 Downing Street',
-    },
-    {
-      key: '5',
-      code: 'DH0002',
-      name: 'John',
-      phone: '0349791128',
-      age: 42,
-      moneny: '100000',
-      product: 5,
-      address: '10 Downing Street',
-    },
-    {
-      key: '6',
-      code: 'DH0002',
-      name: 'John',
-      phone: '0349791128',
-      age: 42,
-      moneny: '100000',
-      product: 5,
-      address: '10 Downing Street',
-    },
+  const arrStatus = [
+    { value: 'pending', label: 'Chờ xác nhận shop' },
+    { value: 'waiting', label: 'Chờ vận chuyển' },
+    { value: 'delivering', label: 'Đang vận chuyển' },
+    { value: 'done', label: 'Thành công' },
+    { value: 'cancel', label: 'Đã hủy' },
   ];
+
+  const dataSource = orders?.data?.data.filter((order: ISOrder) => order.status == status).map((order: ISOrder) => ({
+    code: order._id,
+    name: order.user_id,
+    status: order.status,
+    address: order.address,
+    product: order.products,
+    moneny: order.total_price
+  }));  
 
   const columns = [
     {
@@ -101,12 +42,11 @@ function App() {
     {
       title: 'Người mua',
       dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'SĐT',
-      dataIndex: 'phone',
-      key: 'phone',
+      render: (data: any) => {
+        return <p>{
+         data
+        }</p>;
+      },
     },
     {
       title: 'Địa chỉ',
@@ -128,7 +68,23 @@ function App() {
     {
       title: 'Số sản phẩm',
       dataIndex: 'product',
-      key: 'product',
+      render: (data: any) => {
+        return <p>{
+          data.length
+        }</p>;
+      },
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      render: (data: string) => {
+        return <Select
+        className='ml-2'
+        defaultValue={data}
+        style={{ width: 150 }}
+        options={arrStatus}
+      />;
+      },
     },
     {
       title: 'Action',
@@ -145,16 +101,15 @@ function App() {
     },
   ];
 
+  const handleFilterStatus = (value: string) => {
+    setStatus(value);
+  }
+
   return (
     <>
       <header>
         <div className="flex justify-between">
           <h2 className="text-2xl">Quản lý hóa đơn</h2>
-          <p className="text-xl red mr-5">Month 10: 
-          <span className='text-red-600'>{new Intl.NumberFormat("vi-VN", {
-            style: "currency",
-            currency: "VND",
-          }).format(300000)}</span></p>
         </div>
         <div className="mt-2 flex">
           <Input
@@ -169,14 +124,10 @@ function App() {
           <RangePicker className='ml-3' />
           <Select
             className='ml-2'
-            defaultValue="wait"
+            defaultValue={status}
             style={{ width: 200 }}
-            options={[
-              { value: 'wait', label: 'Chờ xét duyệt' },
-              { value: 'prepare', label: 'Chuyển bị hàng' },
-              { value: 'transport', label: 'Vận chuyển' },
-              { value: 'success', label: 'Hoàn thành' },
-            ]}
+            options={arrStatus}
+            onChange={handleFilterStatus}
           />
         </div>
       </header>

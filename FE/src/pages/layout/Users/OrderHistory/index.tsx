@@ -17,7 +17,6 @@ const OrderHistory = () => {
     // Laays thoong tin khi ddanwg nhap
     const userId = user._id ?? 'NULL';
     const { data, isFetching, refetch } = useGetAllOrdersQuery({ user_id: userId });
-    console.log('useGetAllOrdersQuery',data?.data);
 
     const [updateOrder] = useUpdateOrderMutation();
     const handleCancel = (id: string) => {

@@ -34,7 +34,7 @@ const cartSlice = createSlice({
             state.cart = [...state.cart].filter((item) => !action.payload.includes(item._id as any));
             state.quantity = state.cart.length;
         },
-        updateQuantityCart: (state, action: PayloadAction<{ _id: string; quantity: number }>) => {
+        updateQuantityCart: (state, action: PayloadAction<{ _id: string; quantity: any }>) => {
             state.cart = [...state.cart].map((item) => (item._id === action.payload._id ? { ...item, quantity: action.payload.quantity } : item));
             state.quantity = state.cart.length;
         },

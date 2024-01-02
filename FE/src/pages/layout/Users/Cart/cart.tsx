@@ -1,13 +1,15 @@
-import { removeProductToCart } from "@/store/cart/cart.slice";
+import { removeProductToCart , updateQuantityCart} from "@/store/cart/cart.slice";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { useEffect, useState } from "react";
 import { BsFillTrash3Fill } from "react-icons/bs";
+import { RootState } from 'path-to-your-root-reducer';
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-const userString = localStorage.getItem("user");
-const user = userString ? JSON.parse(userString) : {};
+import { toast } from "react-toastify";
+
 const Cart = () => {
-    const carts = useAppSelector((state) => state.cart.cart);
+    const initialCarts = useAppSelector((state: RootState) => state.cart.cart);
+    const [carts, setCarts] = useState(initialCarts);
     const [checkedItems, setCheckedItems] = useState<any>({});
     const [selectAll, setSelectAll] = useState(false);
     const navigate = useNavigate();
@@ -25,9 +27,39 @@ const Cart = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 dispatch(removeProductToCart(id));
+                const cartAfter = carts.filter((item: any) => {
+                    return item._id !== id;      
+                });
+                setCarts(cartAfter);
             }
         });
     };
+
+    const handleQuantityDown = (currentQuantity: number,cartId: string) => {
+        if(currentQuantity > 1){
+            const cartAfter = carts.map((item: any) => {
+                if (item._id === cartId) {
+                  dispatch(updateQuantityCart({ _id: cartId, quantity: currentQuantity - 1 }))
+                  return { ...item, quantity: item.quantity - 1 };
+                }else{
+                    return item;
+                }
+            });
+            setCarts(cartAfter);
+            toast.success("Cập nhật giỏ hàng thành công");
+        }else{
+            handleRemove(cartId);
+        }
+    }
+
+    const handleQuantityUp = (currentQuantity: number,cartId: string) => {
+            carts.forEach((item: any) => {
+            if (item._id === cartId) {
+                dispatch(updateQuantityCart({ _id: cartId, quantity: currentQuantity + 1 }))
+                toast.success("Cập nhật giỏ hàng thành công");
+            }
+        });
+    }
 
     // Xử lý khi checkbox con được chọn
     const handleCheckboxChange = (event: any) => {
@@ -58,38 +90,23 @@ const Cart = () => {
     };
 
     const handlePayment = () => {
-        console.log('user',user)
-        if(user == {} || !user._id){
-            Swal.fire({
-                icon: "error",
-                title: "Chưa đăng nhập",
-                text: "Vui lòng đăng nhập trước khi thanh toán!",
-                footer: '<a href="#">Why do I have this issue?</a>'
-              }).then((result) => {
-                if (result.isConfirmed) {
-                    navigate("/signin");
-                }
-            });
-        }else{
-            Swal.fire({
-                position: "center",
-                title: "Warning",
-                text: "Bạn muốn xác nhận thanh toán chứ!!",
-                icon: "warning",
-                confirmButtonText: "Đồng ý",
-                showDenyButton: true,
-                returnInputValueOnDeny: false,
-                denyButtonText: "Cancel",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const infoPayment = handleToTalCart();
-    
-                    sessionStorage.setItem("infoPayment", JSON.stringify(infoPayment));
-                    navigate("/order");
-                }
-            });
-        }
+        Swal.fire({
+            position: "center",
+            title: "Warning",
+            text: "Bạn muốn xác nhận thanh toán chứ!!",
+            icon: "warning",
+            confirmButtonText: "Đồng ý",
+            showDenyButton: true,
+            returnInputValueOnDeny: false,
+            denyButtonText: "Cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const infoPayment = handleToTalCart();
 
+                sessionStorage.setItem("infoPayment", JSON.stringify(infoPayment));
+                navigate("/order");
+            }
+        });
     };
 
     useEffect(() => {
@@ -99,7 +116,7 @@ const Cart = () => {
 
     return (
         <div>
-            <div  className="mt-10">
+            <div className="mt-10">
                 <h1 className="text-center font-sans font-bold text-3xl mb-10">Giỏ hàng</h1>
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 ">
                     <div className="md:col-span-2 ">
@@ -139,10 +156,7 @@ const Cart = () => {
                                                 <div className=" items-center ">
                                                     <p className="text-xs lg:text-base">{cart.product.name}</p>
                                                     <div className="flex items-center gap-1">
-                                                        <span className="text-xs lg:text-base md:text-xl ">colorHex:    {cart.product.listQuantityRemain?.find((item) => item.color === cart.color)?.colorHex
-}</span>
-                                                        
-                
+                                                        <span className="text-xs lg:text-base md:text-xl ">colorHex:    {cart.product.listQuantityRemain?.find((item) => item.color === cart.color)?.colorHex}</span>
                                                         <span className="flex gap-3 rounded-full w-4 h-4 opacity-70"></span>
                                                     </div>
                                                 </div>
@@ -151,14 +165,22 @@ const Cart = () => {
                                                 }</span>
                                                 <br />
                                                 <span className="  gap-3 text-xs lg:text-base md:text-xl">
-                                                nameSize :{
-                                                    cart.product.listQuantityRemain?.find((item) => item.color === cart.color)?.nameSize
-                                                }
+                                                    nameSize :{
+                                                        cart.product.listQuantityRemain?.find((item) => item.color === cart.color)?.nameSize
+                                                    }
                                                 </span>
                                             </td>
                                             <td className="whitespace-nowrap text-gray-700 py-4">
                                                 <div className="flex items-center text-xs lg:text-xl">
-                                                    <div className="">{cart.quantity}</div>
+                                                    <div className="input-number flex items-center  border-2 ">
+                                                        <button className="btn-minus flex w-full px-2" onClick={() => handleQuantityDown(cart.quantity,cart._id)}>
+                                                            -
+                                                        </button>
+                                                        <input value={cart.quantity} type="text" className="w-12 text-center border-x-2" />
+                                                        <button className="btn-plus px-2" onClick={() => handleQuantityUp(cart.quantity,cart._id)}>
+                                                            +
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td className=" whitespace-nowrap  text-gray-700  text-xs md:text-base py-4 ">

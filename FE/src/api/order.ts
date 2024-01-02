@@ -1,3 +1,4 @@
+import { ISOrder } from '../interfaces/orders';
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const orderApi = createApi({
@@ -5,8 +6,12 @@ const orderApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: "http://localhost:8080",
     }),
-    tagTypes: ["Sales"],
+    tagTypes: ["Orders"],
     endpoints: (builder) => ({
+        getAllOrdersInAdmin: builder.query<ISOrder[], void>({
+            query: () => `/api/GetAllOrder`,
+            providesTags: ["Orders"]
+        }),
         getAllOrders: builder.query<{ data: any[] }, any>({
             query: (params) => ({ url: "/api/orders", params }),
         }),
@@ -22,5 +27,6 @@ const orderApi = createApi({
     }),
 });
 
-export const { useGetAllOrdersQuery, useNewOrderMutation, useUpdateOrderMutation, useGetOrderByIdQuery } = orderApi;
+export const {useGetAllOrdersInAdminQuery , useGetAllOrdersQuery, useNewOrderMutation, useUpdateOrderMutation, useGetOrderByIdQuery } = orderApi;
+export const orderReducer = orderApi.reducer;
 export default orderApi;
