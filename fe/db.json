@@ -1,0 +1,70 @@
+{
+  "products": [
+    {
+      "id": "3",
+      "name": "Product 3",
+      "price": 5.99,
+      "image": "https://picsum.photos/id/12/300/300",
+      "description": "This is product 3",
+      "discount": 0,
+      "quantity": 200,
+      "featured": true
+    },
+    {
+      "id": "4",
+      "name": "Product 4",
+      "price": 14.99,
+      "image": "https://picsum.photos/id/13/300/300",
+      "description": "This is product 4",
+      "discount": 0.2,
+      "quantity": 75,
+      "featured": true
+    },
+    {
+      "id": "5",
+      "name": "Product 5",
+      "price": 9.99,
+      "image": "https://picsum.photos/id/14/300/300",
+      "description": "This is product 5",
+      "discount": 0,
+      "quantity": 150,
+      "featured": false
+    },
+    {
+      "id": "6",
+      "name": "Product 6",
+      "price": 7.99,
+      "image": "https://picsum.photos/id/15/300/300",
+      "description": "This is product 6",
+      "discount": 0.15,
+      "quantity": 100,
+      "featured": false
+    },
+    {
+      "id": "7",
+      "name": "Product 7",
+      "price": 12.99,
+      "image": "https://picsum.photos/id/16/300/300",
+      "description": "This is product 7",
+      "discount": 0,
+      "quantity": 50,
+      "featured": true
+    },
+    {
+      "id": "8",
+      "name": "Product 8",
+      "price": 17.99,
+      "image": "https://picsum.photos/id/17/300/300",
+      "description": "This is product 8",
+      "discount": 0.1,
+      "quantity": 80,
+      "featured": true
+    },
+    {
+      "name": "Nguyễn Việt Hà666",
+      "price": 54555,
+      "description": "ssssssss",
+      "id": "9"
+    }
+  ]
+}
