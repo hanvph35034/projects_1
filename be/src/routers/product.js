@@ -6,8 +6,8 @@ import {  productValidationSchema } from "../validShema/productSchema.js";
 
 const productRouter = Router();
 productRouter.get("/",getAll)
-productRouter.get(":id/",getOne)
+productRouter.get("/:id",getOne)
 productRouter.post("/",validBodyRequest(productValidationSchema),createProduct)
-productRouter.put(":id/",updateProuduct)
-productRouter.get(":id/",deleteProduct)
+productRouter.put("/:id",updateProuduct)
+productRouter.delete("/:id",deleteProduct)
 export default productRouter

@@ -14,35 +14,35 @@ const productSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    hide: {
-      type: Boolean,
-      default: false,
-    },
-    discountPercentage: {
-      type: Number,
-      default: 0,
-    },
-    rating: {
-      type: Number,
-      default: 0,
-    },
-    stock: {
-      type: Number,
-      default: 0,
-    },
-    brand: {
-      type: String,
-      default: "No brand",
-    },
-    category: {
-      type: String,
-      default: "",
-      ref : "categories"
-    },
-    thumbnail: {
-      type: String,
-      default: "",
-    },
+    // hide: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // discountPercentage: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // rating: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // stock: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // brand: {
+    //   type: String,
+    //   default: "No brand",
+    // },
+    // category: {
+    //   type: String,
+    //   default: "",
+    //   ref : "categories"
+    // },
+    // thumbnail: {
+    //   type: String,
+    //   default: "",
+    // },
     images: {
       type: [String],
       default: [],
