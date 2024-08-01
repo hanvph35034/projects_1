@@ -89,6 +89,7 @@ const {mutate} = useMutation({
   >
     <Button danger>Delete</Button>
   </Popconfirm>
+    <Button danger> <Link to={`add/${product._id}`}>Update</Link></Button>
 </div>
       </>
     }
@@ -104,6 +105,7 @@ if(isLoading)return <div className="">loading...</div>
 if(isError)return <div className="">{error.message}</div>
     return (
         <div>
+          {contextHolder}
         <div className="flex items-center justify-between md-5">
             <h2 className='text-2xl'>List Product</h2>
             <Button type='primary' ><Link to='add'>Add Product</Link></Button>

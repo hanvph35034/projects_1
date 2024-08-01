@@ -16,7 +16,7 @@ export const getAll = async(req,res)=>{
 }
 export const getOne = async(req,res)=>{
     try {
-        const data = await Product.findOne(req.params.id)
+        const data = await Product.findById(req.params.id)
         return res.status(201).json({
             message: "Lay san pham thanh cong!",
             data,

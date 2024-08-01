@@ -14,7 +14,8 @@ const Router = () => {
 
     return (
         <>
-            <Routes>
+        <div className="container mb-5">
+             <Routes>
                 <Route path="/" element={<LayoutWebsite />}>
                     <Route index element={<HomePage />} />
                 </Route>
@@ -22,9 +23,10 @@ const Router = () => {
                     <Route index element={<DashboardPage  />} /> 
                     <Route path="product" element={<ProductManagementPage />} /> 
                      <Route path="product/add" element={< FormAdmin/>} /> 
-                    <Route path="edit/:id" element={< FormAdmin/>} /> 
+                    <Route path="product/add/:id" element={< FormAdmin/>} /> 
                 </Route>
             </Routes>
+        </div>
         </>
     );
 };
