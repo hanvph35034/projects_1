@@ -89,7 +89,7 @@ const {mutate} = useMutation({
   >
     <Button danger>Delete</Button>
   </Popconfirm>
-    <Button danger> <Link to={`add/${product._id}`}>Update</Link></Button>
+    <Button ><Link to={`add/${product._id}`}>Update</Link></Button>
 </div>
       </>
     }
